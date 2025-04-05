@@ -1,6 +1,6 @@
 from django.db import models
 
-# Id,Title,Ingredients,Instructions,Image_Name,Cleaned_Ingredients
+# id,Title,Ingredients,Instructions,Image_Name,Cleaned_Ingredients
 
 class Recipe(models.Model):
     title = models.CharField(max_length=100)
@@ -11,3 +11,15 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get(self, n):
+        if n=='title':
+            return self.title
+        if n=='ingredients':
+            return self.ingredients
+        if n=='instructions':
+            return self.instructions
+        if n=='image_name':
+            return self.image_name
+        if n=='cleaned_ingredients':
+            return self.cleaned_ingredients

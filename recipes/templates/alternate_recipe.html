@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+<div class="containerx">
+	<div class="row">
+		<h3>{{title}}</h3>
+	</div>
+    <div class="row" onload="">
+        <div id="output">Loading...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block jscontent %}
+<script>
+async function fetchStreamingRecipe(alternateType, id) {
+    const outputElement = document.getElementById('output');
+    outputElement.innerHTML = ''; // Clear previous output
+
+    const response = await fetch(`/streaming/alternate/${alternateType}/${id}`);
+
+    if (!response.ok || !response.body) {
+        outputElement.textContent = 'Failed to fetch recipe.';
+        return;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+
+    let buffer = '';
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        // Split into words, keeping incomplete word in buffer
+        const parts = buffer.split(/\s+/);
+        buffer = parts.pop(); // Save the last incomplete word
+
+        for (const word of parts) {
+            const span = document.createElement('span');
+            span.textContent = word + ' ';
+            outputElement.appendChild(span);
+        }
+    }
+
+    // Append any remaining word
+    if (buffer) {
+        const span = document.createElement('span');
+        span.textContent = buffer + ' ';
+        outputElement.appendChild(span);
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    fetchStreamingRecipe('vegan', {{ recipe_id }});
+});
+</script>
+
+{% endblock %}

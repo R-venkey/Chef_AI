@@ -1,4 +1,25 @@
-*{
-    background-color: rgb(166, 170, 247);
+.calendar-container {
+    margin-top: 20pt;
+}
+
+.calendar-container h3 {
     text-align: center;
 }
+.weekday-cell {
+    flex: 1;
+    padding: 5pt;
+    margin: 5pt;
+}
+@media (max-width: 768px) {
+    .calendar-container {
+        display: block;
+    }
+}
+
+@media (min-width: 769px) {
+    .calendar-container {
+        display: flex;
+    }
+}
+
+

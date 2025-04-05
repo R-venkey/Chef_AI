@@ -16,9 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path , include
-from recipes.views import home
+from recipes.views import home, find_recipe, view_recipe, prepare_shopping_list, alternate_recipe, \
+    stream_alternate_recipe
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home),
+    path("find", find_recipe),
+    path("recipe/<int:id>", view_recipe),
+    path("shopping_list/<int:id>", prepare_shopping_list),
+    path("recipes/alternate/<slug:alternate_type>/<int:id>", alternate_recipe),
+    path("streaming/alternate/<slug:alternate_type>/<int:id>", stream_alternate_recipe),
 ]
